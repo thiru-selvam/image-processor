@@ -1,10 +1,13 @@
 import csv
 from io import StringIO
+from uuid import uuid4
 
 from fastapi import status, UploadFile, HTTPException, APIRouter, Depends, BackgroundTasks
 from sqlalchemy.orm import Session
 
-from ..sql_alchemy.database import get_db
+from ..database.database import get_db
+from .utils.process_functions import compress_image
+
 
 router = APIRouter(tags=['image'], prefix='/v1')
 
@@ -38,7 +41,9 @@ async def load_upload_file(background_tasks: BackgroundTasks, file: UploadFile |
             print(e)
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"uploaded Csv format is invalid")
 
-        background_tasks.add_task()
-        background_tasks.tasks()
-        print(products)
+        for serial_num, prod_name, img_url in products:
+            print(img_url[0])
+            compress_img_data = await compress_image(img_url[0])
+            print(compress_img_data)
+
         return {"filename": file.filename}

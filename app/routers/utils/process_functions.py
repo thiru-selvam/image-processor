@@ -5,9 +5,10 @@ from PIL import Image
 from fastapi import HTTPException
 
 
-def compress_image(image_url: str) -> BytesIO:
+async def compress_image(image_url: str) -> BytesIO:
     try:
-        response = requests.get(image_url)
+        print(image_url)
+        response = requests.get(f'{image_url}')
         response.raise_for_status()
         image = Image.open(BytesIO(response.content))
 

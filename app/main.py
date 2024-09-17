@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from app.sql_alchemy.database import engine
+from app.database.database import engine
 from .routers import img_process
-from .sql_alchemy import models
+from .database import models
 
 models.Base.metadata.create_all(bind=engine)
 
